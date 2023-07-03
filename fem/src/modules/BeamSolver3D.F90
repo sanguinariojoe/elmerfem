@@ -134,8 +134,21 @@ SUBROUTINE TimoshenkoSolver(Model, Solver, dt, TransientSimulation)
           MassAssembly=TransientSimulation)      
     END DO
 
-    CALL DefaultFinishBulkAssembly()
+    !-----------------------------------------------------------------------------------     
+    CALL Info('ShellSolver','Saving matrix to: linsys_a_b3dslv.dat',Level=5)
+    OPEN(1,FILE='linsys_a_b3dslv.dat', STATUS='Unknown')
+    CALL PrintMatrix(Solver % Matrix,.FALSE.,.FALSE.,SaveMass=.FALSE.,SaveDamp=.FALSE.)
+    CLOSE(1)
+    !-----------------------------------------------------------------------------------   
 
+    !-----------------------------------------------------------------------------------              
+    CALL Info('ShellSolver','Saving right term to: linsys_b_b3dslv.dat',Level=5)
+    OPEN(1,FILE='linsys_b_b3dslv.dat', STATUS='Unknown')
+    CALL PrintRHS(Solver % Matrix, .FALSE., .FALSE.)
+    CLOSE(1)
+    !----------------------------------------------------------------------------------- 
+    
+    CALL DefaultFinishBulkAssembly()
     !CALL DefaultFinishBoundaryAssembly()
     CALL DefaultFinishAssembly()
     CALL DefaultDirichletBCs()
